@@ -6,7 +6,7 @@
     <div class="row">
         <div class="text-justify col-sm-8">
             <h2> Mis Citas.</h2>
-            <a class="btn-normal-claro" href="crearCitaCliente.html">¡Quiero pedir una cita!</a>
+            <a class="btn-normal-claro" href="/citas/create">¡Quiero pedir una cita!</a>
             <br><br>
             <table class="table table-bordered">
                 <thead class="thead-table">
@@ -20,22 +20,22 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($citas as $cita)
                     <tr>
-                        <th scope="row">30-Oct-2019</th>
-                        <td>15:00</td>
-                        <td>Aceptada</td>
-                        <td>Corte Caballero</td>
-                        <td>Renzo Castaño</td>
-                        <td align="center"><a href=""><img src="images/cancel.png" width="25" height="25" alt=""></a></td>
+                        <td>{{$cita->fecha}}</td>
+                        <td>{{$cita->hora}}</td>
+                        <td>{{$cita->estado}}</td>
+                        <td>{{$cita->servicio->nombre}}</td>
+                        <td>{{$cita->user_estilista->name}}</td>
+                        <td align="center" style="padding:0px">
+                            <form action="/citas/{{$cita->id}}" method="POST" style="display: inline-block;padding:0px">
+                                @csrf
+                                @method('delete')
+                                <button class="btn btn-link" type="submit"><img src="images/cancel.png" width="25" height="25" alt=""></button>
+                            </form>
+                        </td>
                     </tr>
-                    <tr>
-                        <th scope="row">31-Oct-2019</th>
-                        <td>12:00</td>
-                        <td>Rechazada</td>
-                        <td>Cepillado cabello corto</td>
-                        <td>Luz Elena Castaño</td>
-                        <td align="center"><a href=""><img src="images/cancel.png" width="25" height="25" alt=""></a></td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -49,36 +49,14 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($users as $user)
                     <tr>
-                        <td>Nombre Estilista x</td>
-                        <td>
-                            <ul class="list-unstyled">
-                                <li>Lunes, Martes, Jueves : 10:00 - 19:00</li>
-                                <li>Viernes, Sábados: 9:00 - 20:00</li>
-                            </ul>
-                        </td>
+                        <td>{{$user->name}}</td>
+                        <td>{{$user->horario}}</td>
                     </tr>
-                    <tr>
-                        <td>Nombre Estilista x</td>
-                        <td>
-                            <ul class="list-unstyled">
-                                <li>Lunes, Martes, Jueves : 10:00 - 19:00</li>
-                                <li>Viernes, Sábados: 9:00 - 20:00</li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Nombre Estilista x</td>
-                        <td>
-                            <ul class="list-unstyled">
-                                <li>Lunes, Martes, Jueves : 10:00 - 19:00</li>
-                                <li>Viernes, Sábados: 9:00 - 20:00</li>
-                            </ul>
-                        </td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
-
         </div>
     </div>
     <div class="row" align="center">
@@ -90,29 +68,15 @@
                     <tr>
                         <th scope="col" class="col-sm-4">Servicio</th>
                         <th scope="col" class="col-sm-3">Precio</th>
-                        <th scope="col" class="col-sm-4">Servicio</th>
-                        <th scope="col" class="col-sm-1">Precio</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($servicios as $servicio)
                     <tr>
-                        <td>Servicio x</td>
-                        <th scope="row">$$$$$$</th>
-                        <td>Servicio x</td>
-                        <th scope="row">$$$$$$</th>
+                        <td>{{$servicio->nombre}}</td>
+                        <td>{{$servicio->tarifaEstimada}}</td>
                     </tr>
-                    <tr>
-                        <td>Servicio x</td>
-                        <th scope="row">$$$$$$</th>
-                        <td>Servicio x</td>
-                        <th scope="row">$$$$$$</th>
-                    </tr>
-                    <tr>
-                        <td>Servicio x</td>
-                        <th scope="row">$$$$$$</th>
-                        <td>Servicio x</td>
-                        <th scope="row">$$$$$$</th>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

@@ -10,10 +10,12 @@ class Pago extends Model
     {
         return $this->belongsTo('App\Servicio');
     }
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
     public function pago()
     {
         return $this->belongsTo(Pago::class);
     }
-   
-   
 }

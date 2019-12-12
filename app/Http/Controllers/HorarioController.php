@@ -3,18 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use App\Servicio;
-use App\Pago;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
+use App\Role;
+use App\Horario;
 
-class HomeAdminController extends Controller
+use Illuminate\Http\Request;
+
+class HorarioController extends Controller
 {
     public function __construct()
     {
         $this->middleware('Admin');
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -22,10 +21,8 @@ class HomeAdminController extends Controller
      */
     public function index()
     {
-        return view('homeAdmin', [
-            'servicios' => Servicio::all()->pluck('nombre', 'id'),
-            'estilistas' => User::where('role_id',  3)->get()->pluck('name', 'id'),
-            'pagos' => Pago::where('estado',  0)->get()
+        return view('horarios.index', [
+            'users' => User::where('role_id',  3)->get()
         ]);
     }
 
@@ -48,18 +45,14 @@ class HomeAdminController extends Controller
     public function store(Request $request)
     {
         $validaData = $request->validate([
-            'servicio' => 'required',
-            'estilista' => 'required',
-            'valor' => 'required'
+            'horario' => 'required'
         ]);
-        $pago = new Pago;
-        $now = new \DateTime();
-        $pago->valor = $validaData["valor"];
-        $pago->fecha = Carbon::now()->toDateTimeString();
-        $pago->servicio_id = $validaData["servicio"];
-        $pago->estilista_id = $validaData["estilista"];
-        $pago->save();
-        return redirect('/homeAdmin');
+
+        $user = new User();
+        $user->horario =  $validaData['horario'];
+        $user->save();
+
+        return redirect('/servicios');
     }
 
     /**
@@ -81,7 +74,10 @@ class HomeAdminController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::findOrFail($id);
+        return view('horarios.edit', [
+            'user' => $user
+        ]);
     }
 
     /**
@@ -93,11 +89,15 @@ class HomeAdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $pago = Pago::findOrFail($id);
-        $pago->estado = true;
-        $pago->save();
+        $validaData = $request->validate([
+            'horario' => 'required'
+        ]);
 
-        return redirect('/homeAdmin');
+        $user = User::findOrFail($id);
+        $user->horario =  $validaData['horario'];
+        $user->save();
+
+        return redirect('/horario');
     }
 
     /**
@@ -108,9 +108,6 @@ class HomeAdminController extends Controller
      */
     public function destroy($id)
     {
-        $pago = Pago::findOrFail($id);
-        $pago->delete();
-
-        return redirect('/homeAdmin');
+        //
     }
 }

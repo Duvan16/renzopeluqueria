@@ -10,4 +10,8 @@ class Servicio extends Model
     {
         return $this->hasMany(Pago::class);
     }
+    public function citas()
+    {
+        return $this->hasMany(Cita::class);
+    }
 }

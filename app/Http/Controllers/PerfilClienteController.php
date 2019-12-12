@@ -2,19 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Servicio;
-use App\Pago;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
+use App\User;
 
-class HomeAdminController extends Controller
+class PerfilClienteController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('Admin');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -22,10 +14,8 @@ class HomeAdminController extends Controller
      */
     public function index()
     {
-        return view('homeAdmin', [
-            'servicios' => Servicio::all()->pluck('nombre', 'id'),
-            'estilistas' => User::where('role_id',  3)->get()->pluck('name', 'id'),
-            'pagos' => Pago::where('estado',  0)->get()
+        return view('perfilcliente.index', [
+            'users' => User::where('id',  auth()->user()->id)->get()
         ]);
     }
 
@@ -47,19 +37,7 @@ class HomeAdminController extends Controller
      */
     public function store(Request $request)
     {
-        $validaData = $request->validate([
-            'servicio' => 'required',
-            'estilista' => 'required',
-            'valor' => 'required'
-        ]);
-        $pago = new Pago;
-        $now = new \DateTime();
-        $pago->valor = $validaData["valor"];
-        $pago->fecha = Carbon::now()->toDateTimeString();
-        $pago->servicio_id = $validaData["servicio"];
-        $pago->estilista_id = $validaData["estilista"];
-        $pago->save();
-        return redirect('/homeAdmin');
+        //
     }
 
     /**
@@ -81,7 +59,7 @@ class HomeAdminController extends Controller
      */
     public function edit($id)
     {
-        //
+    
     }
 
     /**
@@ -93,11 +71,7 @@ class HomeAdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $pago = Pago::findOrFail($id);
-        $pago->estado = true;
-        $pago->save();
-
-        return redirect('/homeAdmin');
+        //
     }
 
     /**
@@ -108,9 +82,6 @@ class HomeAdminController extends Controller
      */
     public function destroy($id)
     {
-        $pago = Pago::findOrFail($id);
-        $pago->delete();
-
-        return redirect('/homeAdmin');
+        //
     }
 }

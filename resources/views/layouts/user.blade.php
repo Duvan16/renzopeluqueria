@@ -43,21 +43,20 @@
                     <div class="collapse navbar-collapse" id="defaultNavbar1">
                         <ul class="nav navbar-nav">
                             @if(Auth::user()->role_id==1)
-                            <li><a href="admin.html">Inicio</a> </li>
-                            <li><a href="pagos.html">Pagos</a> </li>
-                            <li><a href="citas.html">Citas</a></li>
+                            <li><a href="{{url('homeAdmin')}}">Inicio</a> </li>
+                            <li><a href="{{url('pagos')}}">Pagos</a> </li>
+                            <li><a href="{{url('citas')}}">Citas</a></li>
                             <li><a href="{{url('usuarios')}}">Usuarios</a> </li>
-                            <li class="nav-item"><a class="nav-link" href="estilistas.html">Estilistas</a> </li>
-                            <li><a class="nav-link" href="clientes.html">Clientes</a> </li>
+                            <li class="nav-item"><a class="nav-link" href="{{url('horario')}}">Estilistas</a> </li>
                             <li><a class="nav-link" href="/servicios">Servicios</a></li>
                             @endif
                             @if(Auth::user()->role_id==2)
-                            <li><a href="admin.html">Inicio</a> </li>
-                            <li><a href="perfilAdmin.html">Perfil</a></li>
+                            <li><a href="{{url('home')}}">Inicio</a> </li>
+                            <li><a href="{{url('/perfilcliente')}}">Perfil</a></li>
                             @endif
                             @if(Auth::user()->role_id==3)
-                            <li><a href="admin.html">Inicio</a> </li>
-                            <li><a href="perfilAdmin.html">Perfil</a></li>
+                            <li><a href="{{url('homeEstilista')}}">Inicio</a> </li>
+                            <li><a href="">Perfil</a></li>
                             @endif
                             <li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

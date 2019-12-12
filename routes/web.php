@@ -19,7 +19,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/homeAdmin', 'HomeAdminController@index')->name('homeAdmin');
+Route::resource('/homeAdmin', 'HomeAdminController');
 
 Route::resource('/homeEstilista', 'HomeEstilistaController');
 
@@ -30,3 +30,12 @@ Route::get('/servicios/{id}/confirmDelete', 'ServicioController@confirmDelete');
 Route::resource('/usuarios', 'UserController');
 
 Route::get('/usuarios/{id}/confirmDelete', 'UserController@confirmDelete');
+
+Route::resource('/pagos', 'PagoController');
+
+Route::resource('/citas', 'CitaController');
+
+Route::resource('/horario', 'HorarioController');
+
+Route::resource('/perfilcliente', 'PerfilClienteController');
+

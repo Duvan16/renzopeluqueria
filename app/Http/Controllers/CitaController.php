@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Cita;
 use App\User;
 use App\Servicio;
-use App\Pago;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 
-class HomeAdminController extends Controller
+class CitaController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('Admin');
+        
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -22,10 +20,9 @@ class HomeAdminController extends Controller
      */
     public function index()
     {
-        return view('homeAdmin', [
-            'servicios' => Servicio::all()->pluck('nombre', 'id'),
+        return view('citas.index', [
             'estilistas' => User::where('role_id',  3)->get()->pluck('name', 'id'),
-            'pagos' => Pago::where('estado',  0)->get()
+            'citas' => Cita::all()
         ]);
     }
 
@@ -36,7 +33,10 @@ class HomeAdminController extends Controller
      */
     public function create()
     {
-        //
+        return view('citas.create', [
+            'servicios' => Servicio::all()->pluck('nombre', 'id'),
+            'estilistas' => User::where('role_id',  3)->get()->pluck('name', 'id')
+        ]);
     }
 
     /**
@@ -48,18 +48,19 @@ class HomeAdminController extends Controller
     public function store(Request $request)
     {
         $validaData = $request->validate([
+            'fecha' => 'required',
+            'hora' => 'required',
             'servicio' => 'required',
-            'estilista' => 'required',
-            'valor' => 'required'
+            'estilista' => 'required'
         ]);
-        $pago = new Pago;
-        $now = new \DateTime();
-        $pago->valor = $validaData["valor"];
-        $pago->fecha = Carbon::now()->toDateTimeString();
-        $pago->servicio_id = $validaData["servicio"];
-        $pago->estilista_id = $validaData["estilista"];
-        $pago->save();
-        return redirect('/homeAdmin');
+        $cita = new Cita;
+        $cita->fecha = $validaData["fecha"];
+        $cita->hora = $validaData["hora"];
+        $cita->cliente_id =  auth()->user()->id;
+        $cita->servicio_id = $validaData["servicio"];
+        $cita->estilista_id = $validaData["estilista"];
+        $cita->save();
+        return redirect('/home');
     }
 
     /**
@@ -70,7 +71,11 @@ class HomeAdminController extends Controller
      */
     public function show($id)
     {
-        //
+        $cita = Cita::where('estilista_id',  $id)->get();
+        return view('citas.index', [
+            'estilistas' => User::where('role_id',  3)->get()->pluck('name', 'id'),
+            'citas' => $cita
+        ]);
     }
 
     /**
@@ -93,11 +98,7 @@ class HomeAdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $pago = Pago::findOrFail($id);
-        $pago->estado = true;
-        $pago->save();
-
-        return redirect('/homeAdmin');
+        //
     }
 
     /**
@@ -108,9 +109,9 @@ class HomeAdminController extends Controller
      */
     public function destroy($id)
     {
-        $pago = Pago::findOrFail($id);
-        $pago->delete();
+        $cita = Cita::findOrFail($id);
+        $cita->delete();
 
-        return redirect('/homeAdmin');
+        return redirect('/home');
     }
 }

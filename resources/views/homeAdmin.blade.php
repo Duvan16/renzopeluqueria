@@ -4,26 +4,42 @@
 <div class="container">
     <div class="thumbnail">
         <h3>Crear pago de servicio</h3>
-        <form class="form">
+
+        @if($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach($errors->all() as $error)
+                <li>{{$error}}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+        <form action="{{url('homeAdmin')}}" method="POST" class="form">
+            @csrf
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label>Servicio</label>
-                    <select class="form-control">
-                        <option selected>Choose...</option>
-                        <option>...</option>
+                    <select class="form-control" name="servicio">
+                        <option value="">Seleccione</option>
+                        @foreach ($servicios as $key =>$value)
+                        <option value="{{$key}}">{{$value}}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group col-md-3">
                     <label>Estilista</label>
-                    <select class="form-control">
-                        <option selected>Choose...</option>
-                        <option>...</option>
+                    <select class="form-control" name="estilista">
+                        <option value="">Seleccione</option>
+                        @foreach ($estilistas as $key =>$value)
+                        <option value="{{$key}}">{{$value}}</option>
+                        @endforeach
                     </select>
                 </div>
 
                 <div class="form-group col-md-3">
                     <label>Valor</label>
-                    <input type="number" class="form-control">
+                    <input type="number" class="form-control" name="valor">
                 </div>
                 <label> ______________</label>
                 <div class="form-group col-md-2">
@@ -42,45 +58,32 @@
                     <tr>
                         <th scope="col">Fecha</th>
                         <th scope="col">Hora</th>
-                        <th scope="col">Estilista</th>
                         <th scope="col">Servicio</th>
                         <th scope="col">Valor</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach($pagos as $pago)
                     <tr>
-                        <th scope="row">30-Oct-2019</th>
-                        <td>15:00</td>
-                        <td>Rechazada</td>
-                        <td>Corte Caballero</td>
-                        <td>7000</td>
-                        <td align="center">
-
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-4">
-                                <a href=""><img src="images/ok.png" width="25" height="25" alt=""></a></div>
-                            <div class="col-sm-4">
-                                <a href=""><img src="images/cancel.png" width="25" height="25" alt=""></a></div>
-
+                        <td>{{\Carbon\Carbon::parse($pago->fecha)->toFormattedDateString()}}</td>
+                        <td>{{\Carbon\Carbon::parse($pago->fecha)->toTimeString()}}</td>
+                        <td>{{$pago->servicio->nombre}}</td>
+                        <td>{{$pago->valor}}</td>
+                        <td align="center" style="padding:0px">
+                            <form action="/homeAdmin/{{$pago->id}}" method="POST" style="display: inline-block;padding:0px">
+                                @csrf
+                                @method('put')
+                                <button class="btn btn-link" type="submit"><img src="images/ok.png" width="25" height="25" alt=""></button>
+                            </form>
+                            <form action="/homeAdmin/{{$pago->id}}" method="POST" style="display: inline-block;padding:0px">
+                                @csrf
+                                @method('delete')
+                                <button class="btn btn-link" type="submit"><img src="images/cancel.png" width="25" height="25" alt=""></button>
+                            </form>
                         </td>
                     </tr>
-                    <tr>
-                        <th scope="row">31-Oct-2019</th>
-                        <td>12:00</td>
-                        <td>Rechazada</td>
-                        <td>Cepillado cabello corto</td>
-                        <td>15000</td>
-                        <td align="center">
-
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-4">
-                                <a href=""><img src="images/ok.png" width="25" height="25" alt=""></a></div>
-                            <div class="col-sm-4">
-                                <a href=""><img src="images/cancel.png" width="25" height="25" alt=""></a></div>
-
-                        </td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

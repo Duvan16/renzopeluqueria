@@ -67,13 +67,17 @@ class User extends Authenticatable
         return false;
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    // public function pago()
+    // public function user()
     // {
-    //     return $this->hasMany(Pago::class);
+    //     return $this->belongsTo(User::class);
     // }
+
+    public function pagos()
+    {
+        return $this->hasMany(Pago::class);
+    }
+    public function citas()
+    {
+        return $this->hasMany(Cita::class);
+    }
 }
